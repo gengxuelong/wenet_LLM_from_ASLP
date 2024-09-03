@@ -1,0 +1,8 @@
+encoder: hubert
+encoder_conf:
+   frontend_conf:
+       upstream: hubert_local
+       upstream_model_config:
+       upstream_ckpt: /home/work_nfs8/xlgeng/chinese_hubert_large.pt
+   download_dir: ./hub
+   multilayer_feature: true

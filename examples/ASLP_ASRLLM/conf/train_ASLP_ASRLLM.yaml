@@ -1,0 +1,88 @@
+model: ASRLLM
+
+# tokenizer ,ASLP
+tokenizer: llm
+tokenizer_conf:
+  llm_path: /home/work_nfs8/xlgeng/models--baichuan-inc--Baichuan2-7B-Chat/snapshots/ea66ced17780ca3db39bc9f8aa601d8463db3da5
+
+
+# dataset related
+dataset_conf:
+    feats_type: raw_wav
+    filter_conf:
+        max_length: 2625 # 必须max_frames_in_batch对应,帧数
+        min_length: 50
+    resample_conf:
+        resample_rate: 16000
+    break: false  # write by ASLP ,是否是中途打断重新恢复, 决定了batch index和使用的具体数据, 和init_step_epoch搭配使用
+    break_conf:
+      start: 0 # 可以是step ,也可以是batch, 这两个数主要是算一下比例,绝对值不重要
+      all: 24990
+    big_shuffle: true # ASLP: 全局的shuffle, 当设置了固定的随机数种子，开启此值也可以通过break参数进行数据恢复
+    shuffle: true # 局部的shuffle,取决于shuffle_size
+    shuffle_conf:
+        shuffle_size: 2500
+    sort: true
+    sort_conf:
+        sort_size: 2500  # sort_size should be less than shuffle_size
+    batch_conf:
+        batch_type: 'dynamic'
+        max_frames_in_batch: 420000
+
+
+grad_clip: 5
+accum_grad: 14
+max_epoch: 1
+log_interval: 500
+save_interval: 714 #save model depend on step
+init_step_epoch: true # 决定了学习率是否为0
+
+
+optim: adamw
+optim_conf:
+  betas:
+  - 0.9
+  - 0.99
+  eps: 1.0e-06
+  lr: 5.0e-05
+  weight_decay: 0.01
+scheduler: warmuplr
+scheduler_conf:
+  warmup_steps: 2000
+
+
+
+# encoder: whisper
+# encoder_conf:
+#     whisper_model: large-v2
+#     dropout_rate: 0.0
+
+
+encoder: hubert
+encoder_conf:
+   frontend_conf:
+       upstream: hubert_local
+       upstream_model_config:
+       upstream_ckpt: /home/work_nfs8/xlgeng/chinese_hubert_large.pt
+   download_dir: ./hub
+   multilayer_feature: true
+
+llm_path: /home/work_nfs8/xlgeng/models--baichuan-inc--Baichuan2-7B-Chat/snapshots/ea66ced17780ca3db39bc9f8aa601d8463db3da5
+
+low_resource: false
+
+fire_module: link # 三个组件可选： link, encoder, llm ,llm需要和use_lora=true搭配,本项目训练策略为每次仅激活一个组件进行训练
+
+use_lora: true
+lora_alpha: 32
+lora_rank: 8
+lora_dropout: 0.1
+
+llama_model_generate_max_length: 200 # 200
+llama_model_generate_min_length: 1
+llama_model_generate_num_beams: 4
+llama_model_generate_do_sample: true
+llama_model_generate_top_p: 0.9
+llama_model_generate_repetition_penalty: 1.0
+llama_model_generate_length_penalty: 1.0
+llama_model_generate_temperature: 1.0

@@ -1,0 +1,110 @@
+# 本版本说明：
+# 使用hubert作为encoder，使用全量的wenetspeech数据进行训练。 stage3,lora微调LLM
+
+model: ASRLLM
+
+# tokenizer ,gxl
+tokenizer: llm
+tokenizer_conf:
+  llm_path: /home/41_data/models--baichuan-inc--Baichuan2-7B-Chat/snapshots/ea66ced17780ca3db39bc9f8aa601d8463db3da5
+
+
+# dataset related
+dataset_conf:
+    feats_type: raw_wav
+    filter_conf:
+        max_length: 2625 # 必须max_frames_in_batch对应,帧数
+        min_length: 50
+    resample_conf:
+        resample_rate: 16000
+    overturn: true # 是否翻转, 整体翻转
+    break: true  # write by gxl ,是否是中途打断重新恢复, 决定了batch index和使用的具体数据
+    break_conf:
+      start: 10710 # 可以是step ,也可以是batch, 这两个数主要是算一下比例,绝对值不重要
+      all: 24990
+    big_shuffle: false # gxl: 全局的shuffle,此处不进行全局shuffle,这样方便记录数据顺序
+    shuffle: true # 局部的shuffle,取决于shuffle_size
+    shuffle_conf:
+        shuffle_size: 2500
+    sort: true
+    sort_conf:
+        sort_size: 2500  # sort_size should be less than shuffle_size
+    batch_conf:
+        batch_type: 'dynamic'
+#        batch_size: 5
+        max_frames_in_batch: 420000
+#    if_half_data: false # 是否只使用一半数据, 全部数据太多了,训一次时间太长,可以切开,每次训一半
+#    if_first_half: true # 是前一半还是后一半
+
+
+grad_clip: 5
+accum_grad: 14
+max_epoch: 1
+log_interval: 500
+#total_batch_num: 169000
+# save model depend on step, gxl
+save_interval: 714 #714
+init_step_epoch: false # 决定了学习率是否为0
+
+#
+#load_epoch_ckpt: false
+#load_step_ckpt: true
+#load_eval_ckpt: false
+# ckpt_path:
+# gengxuelong
+#ckpt_path: /home/work_nfs6/xlgeng/bsmu_template/exp/salmonn_v8_2_lr5e_5/step_20000.pt
+#ckpt_path: /home/work_nfs7/xlgeng/bsmu_template/exp/salmonn_v8_lr5e_5/1_145000.pt
+#ckpt_path: /home/work_nfs6/xlgeng/bsmu_template/exp/salmonn_v8_2_lr5e_5_new/step_10710.pt
+
+optim: adamw
+optim_conf:
+  betas:
+  - 0.9
+  - 0.99
+  eps: 1.0e-06
+  lr: 5.0e-05
+  weight_decay: 0.01
+scheduler: warmuplr
+scheduler_conf:
+  warmup_steps: 2000
+
+
+
+# encoder: whisper
+# encoder_conf:
+#     whisper_model: large-v2
+#     dropout_rate: 0.0
+
+
+encoder: hubert
+encoder_conf:
+   frontend_conf:
+       upstream: hubert_local
+       upstream_model_config:
+       upstream_ckpt: /home/41_data/chinese_hubert_large.pt
+   download_dir: ./hub
+   multilayer_feature: true
+
+# enc_init: /home/work_nfs5_ssd/yzli/workspace/wenet/examples/aishell/s0/exp/whisper_large_v1/avg_3.pt
+llm_path: /home/41_data/models--baichuan-inc--Baichuan2-7B-Chat/snapshots/ea66ced17780ca3db39bc9f8aa601d8463db3da5
+#prompt: 转录这些音频. #Describe the speech.
+vicuna_low_resource: false
+speech_qformer_token_num: 1
+speech_qformer_layer: 2
+
+use_lora: true
+lora_alpha: 32
+lora_rank: 8
+lora_dropout: 0.1
+
+
+second_per_frame: 0.333333
+second_stride: 0.333333
+llama_model_generate_max_length: 200 # 200
+llama_model_generate_min_length: 1
+llama_model_generate_num_beams: 4
+llama_model_generate_do_sample: true
+llama_model_generate_top_p: 0.9
+llama_model_generate_repetition_penalty: 1.0
+llama_model_generate_length_penalty: 1.0
+llama_model_generate_temperature: 1.0
