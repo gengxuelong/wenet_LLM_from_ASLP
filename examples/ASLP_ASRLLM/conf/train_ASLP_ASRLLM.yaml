@@ -3,7 +3,7 @@ model: ASRLLM
 # tokenizer ,ASLP
 tokenizer: llm
 tokenizer_conf:
-  llm_path: /home/work_nfs8/xlgeng/models--baichuan-inc--Baichuan2-7B-Chat/snapshots/ea66ced17780ca3db39bc9f8aa601d8463db3da5
+  llm_path: /home/work_nfs15/asr_data/ckpt/asrllm/baichuan-7B-chat/models--baichuan-inc--Baichuan2-7B-Chat/snapshots/ea66ced17780ca3db39bc9f8aa601d8463db3da5
 
 
 # dataset related
@@ -63,11 +63,11 @@ encoder_conf:
    frontend_conf:
        upstream: hubert_local
        upstream_model_config:
-       upstream_ckpt: /home/work_nfs8/xlgeng/chinese_hubert_large.pt
+       upstream_ckpt: "/home/work_nfs15/asr_data/ckpt/origin_chinese_hubert/chinese_hubert_large_s3qrl.pt"
    download_dir: ./hub
    multilayer_feature: true
 
-llm_path: /home/work_nfs8/xlgeng/models--baichuan-inc--Baichuan2-7B-Chat/snapshots/ea66ced17780ca3db39bc9f8aa601d8463db3da5
+llm_path: /home/work_nfs15/asr_data/ckpt/asrllm/baichuan-7B-chat/models--baichuan-inc--Baichuan2-7B-Chat/snapshots/ea66ced17780ca3db39bc9f8aa601d8463db3da5
 
 low_resource: false
 
