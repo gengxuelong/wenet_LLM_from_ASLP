@@ -7,14 +7,14 @@ export CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7"
 stage=5 # start from 0 if you need to start from data_list preparation
 stop_stage=5
 
-decode_checkpoint=/home/work_nfs8/xlgeng/new_workspace/wenet_gxl_salmonn/examples/aishell/salmonn/exp/salmonn_v14/1_epoch/step_15708.pt
+decode_checkpoint=/home/work_nfs15/asr_data/ckpt/asrllm/13000hour_model/epoch_4.pt
 decode_config_path=./conf/train_ASLP_ASRLLM.yaml
 output_dir=./exp
 mkdir -p $output_dir
 
 gpu_id=0
 decode_modes="ASRLLM_decode"
-test_data_dir="/home/work_nfs8/xlgeng/data/scp_test"
+test_data_dir="/home/work_nfs15/asr_data/data/asr_test_sets"
 test_sets="aishell aishell2"
 . tools/parse_options.sh || exit 1;
 

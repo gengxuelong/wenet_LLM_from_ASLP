@@ -20,6 +20,8 @@ class S3prlFrontend(torch.nn.Module):
     ):
         try:
             import s3prl
+            from s3prl.upstream.hubert import expert
+            from s3prl.upstream.hubert import hubert_model
             from s3prl.nn import Featurizer, S3PRLUpstream
         except Exception as e:
             print("Error: S3PRL is not properly installed.")
@@ -110,3 +112,22 @@ class S3prlFrontend(torch.nn.Module):
     def reload_pretrained_parameters(self):
         self.upstream.load_state_dict(self.pretrained_params)
         logging.info("Pretrained S3PRL frontend model parameters reloaded!")
+
+if __name__ == "__main__":
+    source_fairseq_path = "/home/work_nfs15/asr_data/ckpt/origin_chinese_hubert/chinese_hubert_large.pt"
+    s3qrl_path = "/home/work_nfs15/asr_data/ckpt/origin_chinese_hubert/chinese_hubert_large_s3qrl.pt"
+    # load_and_convert_fairseq_ckpt(source_fairseq_path, s3qrl_path) # 成功转换
+    hubert_model = S3prlFrontend(
+        frontend_conf={
+            "upstream": "hubert_local",
+            "upstream_model_config": "",
+            "upstream_ckpt": s3qrl_path,
+        },
+        download_dir="./hub",
+        multilayer_feature=True, )
+    print(hubert_model)
+    input_wav_tensor = torch.randn(5, 16000 * 10)
+    # 随机出5个长度
+    input_wav_lens = torch.randint(16000 * 5, 16000 * 10, (5,))
+    feats_i, feats_lens_i = hubert_model(input_wav_tensor, input_wav_lens)
+    print(feats_i.shape, feats_lens_i.shape)
