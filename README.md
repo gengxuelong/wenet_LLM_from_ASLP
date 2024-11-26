@@ -1,22 +1,7 @@
-# WeNet
+# wenet_LLM_from_ASLP
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python-Version](https://img.shields.io/badge/Python-3.7%7C3.8-brightgreen)](https://github.com/wenet-e2e/wenet)
-
-[**Roadmap**](https://github.com/wenet-e2e/wenet/issues/1683)
-| [**Docs**](https://wenet-e2e.github.io/wenet)
-| [**Papers**](https://wenet-e2e.github.io/wenet/papers.html)
-| [**Runtime**](https://github.com/wenet-e2e/wenet/tree/main/runtime)
-| [**Pretrained Models**](docs/pretrained_models.md)
-| [**HuggingFace**](https://huggingface.co/spaces/wenet/wenet_demo)
-
-**We** share **Net** together.
-
-## Highlights
-
-* **Production first and production ready**: The core design principle, WeNet provides full stack production solutions for speech recognition.
-* **Accurate**: WeNet achieves SOTA results on a lot of public speech datasets.
-* **Light weight**: WeNet is easy to install, easy to use, well designed, and well documented.
 
 
 ## Install
@@ -24,77 +9,33 @@
 ### Install python package
 
 ``` sh
-pip install git+https://github.com/wenet-e2e/wenet.git
-```
-
-**Command-line usage** (use `-h` for parameters):
-
-``` sh
-wenet --language chinese audio.wav
-```
-
-**Python programming usage**:
-
-``` python
-import wenet
-
-model = wenet.load_model('chinese')
-result = model.transcribe('audio.wav')
-print(result['text'])
-```
-
-Please refer [python usage](docs/python_package.md) for more command line and python programming usage.
-
-### Install for training & deployment
-
-- Clone the repo
-``` sh
-git clone https://github.com/wenet-e2e/wenet.git
-```
-
-- Install Conda: please see https://docs.conda.io/en/latest/miniconda.html
-- Create Conda env:
-
-``` sh
-conda create -n wenet python=3.8
-conda activate wenet
+pip install https://github.com/gengxuelong/wenet_LLM_from_ASLP.git
+cd wenet_LLM_from_ASLP
 pip install -r requirements.txt
-pre-commit install  # for clean and tidy code
 ```
 
-**Build for deployment**
+## paper 
+[**Unveiling the Potential of LLM-Based ASR on Chinese Open-Source Datasets**](https://arxiv.org/abs/2405.02132)
 
-Optionally, if you want to use x86 runtime or language model(LM),
-you have to build the runtime as follows. Otherwise, you can just ignore this step.
+This codebase is the concrete implementation of our paper "Unveiling the Potential of LLM-Based ASR on Chinese Open-Source Datasets."
 
-``` sh
-# runtime build requires cmake 3.14 or above
-cd runtime/libtorch
-mkdir build && cd build && cmake -DGRAPH_TOOLS=ON .. && cmake --build .
+## recognize for our best ckpt model in paper
+the model can be downloaded from [here](https://pan.baidu.com/s/1-iz-xSdZwa0AFojWBU2l1g?pwd=n7ub) by **Baidu Cloud**.
+```commandline
+cd examples/ASLP_ASRLLM
+ln -s ../../wenet .
+ln -s ../../tools .
 ```
+Next, modify the paths in conf/train_ASLP_ASRLLM.yaml, 
+where the Baichuan2-7B-chat used for initialization can be obtained [here](https://huggingface.co/baichuan-inc/Baichuan2-7B-Chat). The original Chinese HuBERT can be obtained [here](https://cloud.tencent.com/developer/article/2017032).
 
-Please see [doc](https://github.com/wenet-e2e/wenet/tree/main/runtime) for building
-runtime on more platforms and OS.
+Next, we set the **decode_checkpoint** variable in recognize.sh to the path of the checkpoint you downloaded from Baidu Cloud.
 
-
-## Discussion & Communication
-
-You can directly discuss on [Github Issues](https://github.com/wenet-e2e/wenet/issues).
-
-For Chinese users, you can aslo scan the QR code on the left to follow our offical account of WeNet.
-We created a WeChat group for better discussion and quicker response.
-Please scan the personal QR code on the right, and the guy is responsible for inviting you to the chat group.
-
-| <img src="https://github.com/robin1001/qr/blob/master/wenet.jpeg" width="250px"> | <img src="https://github.com/robin1001/qr/blob/master/binbin.jpeg" width="250px"> |
-| ---- | ---- |
-
+The test set used for inference follows the same format as WeNet. The input is a data.list file in JSONL format, where each line is a JSON object containing the audio file path, corresponding text, and key value.
 
 ## Acknowledge
 
-1. We borrowed a lot of code from [ESPnet](https://github.com/espnet/espnet) for transformer based modeling.
-2. We borrowed a lot of code from [Kaldi](http://kaldi-asr.org/) for WFST based decoding for LM integration.
-3. We referred [EESEN](https://github.com/srvk/eesen) for building TLG based graph for LM integration.
-4. We referred to [OpenTransformer](https://github.com/ZhengkunTian/OpenTransformer/) for python batch inference of e2e models.
+We borrowed a lot of code from [WeNet 2.0](https://github.com/wenet-e2e/wenet) for transformer based modeling.
 
 ## Citations
 
