@@ -137,7 +137,7 @@ class ASLPConv1dSubsampling8(nn.Module):
             torch.nn.GELU(),
             torch.nn.Conv1d(odim, odim, 3, 2),
             torch.nn.GELU(),
-            torch.nn.Conv1d(odim, odim, 3, 8),
+            torch.nn.Conv1d(odim, odim, 3, 2),
             torch.nn.GELU(),
         )
 
@@ -202,6 +202,7 @@ class ASRLLM_Model(nn.Module):
         if not low_resource:
             self.llama_model = AutoModelForCausalLM.from_pretrained(
                 llm_path,
+                torch_dtype=torch.float16,
                 # torch_dtype=torch.float32 if is_inference else torch.float16,
                 trust_remote_code=True
             )
