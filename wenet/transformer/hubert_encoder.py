@@ -116,6 +116,7 @@ class S3prlFrontend(torch.nn.Module):
 if __name__ == "__main__":
     source_fairseq_path = "/home/work_nfs15/asr_data/ckpt/origin_chinese_hubert/chinese_hubert_large.pt"
     s3qrl_path = "/home/work_nfs15/asr_data/ckpt/origin_chinese_hubert/chinese_hubert_large_s3qrl.pt"
+    # from s3prl.upstream.hubert.convert import load_and_convert_fairseq_ckpt
     # load_and_convert_fairseq_ckpt(source_fairseq_path, s3qrl_path) # 成功转换
     hubert_model = S3prlFrontend(
         frontend_conf={

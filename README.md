@@ -27,9 +27,16 @@ ln -s ../../wenet .
 ln -s ../../tools .
 ```
 Next, modify the paths in conf/train_ASLP_ASRLLM.yaml, 
-where the Baichuan2-7B-chat used for initialization can be obtained [here](https://huggingface.co/baichuan-inc/Baichuan2-7B-Chat). The original Chinese HuBERT can be obtained [here](https://cloud.tencent.com/developer/article/2017032).
+where the Baichuan2-7B-chat used for initialization can be obtained [here](https://huggingface.co/baichuan-inc/Baichuan2-7B-Chat). The original Chinese HuBERT can be obtained [here](https://cloud.tencent.com/developer/article/2017032). 
+HuBERT needs to be converted to the format required by S3PRL. The specific steps are as follows:
+```python
+source_fairseq_path =""
+s3qrl_path = ""
+from s3prl.upstream.hubert.convert import load_and_convert_fairseq_ckpt
+load_and_convert_fairseq_ckpt(source_fairseq_path, s3qrl_path)
+```
 
-Next, we set the **decode_checkpoint** variable in recognize.sh to the path of the checkpoint you downloaded from Baidu Cloud.
+Next, set the **decode_checkpoint** variable in recognize.sh to the path of the checkpoint you downloaded from Baidu Cloud.
 
 The test set used for inference follows the same format as WeNet. The input is a data.list file in JSONL format, where each line is a JSON object containing the audio file path, corresponding text, and key value.
 
