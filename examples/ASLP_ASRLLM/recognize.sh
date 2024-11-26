@@ -12,7 +12,7 @@ decode_config_path=./conf/train_ASLP_ASRLLM.yaml
 output_dir=./exp
 mkdir -p $output_dir
 
-gpu_id=0
+gpu_id=7
 decode_modes="ASRLLM_decode"
 test_data_dir="/home/work_nfs15/asr_data/data/asr_test_sets"
 test_sets="aishell aishell2"
