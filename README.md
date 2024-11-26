@@ -41,25 +41,32 @@ Next, set the **decode_checkpoint** variable in recognize.sh to the path of the 
 The test set used for inference follows the same format as WeNet. The input is a data.list file in JSONL format, where each line is a JSON object containing the audio file path, corresponding text, and key value.
 
 ## Acknowledge
-
-We borrowed a lot of code from [WeNet 2.0](https://github.com/wenet-e2e/wenet) for transformer based modeling.
-
+We borrowed a lot of code from  [WeNet 2.0](https://github.com/wenet-e2e/wenet) for the basic code framework.
 ## Citations
 
 ``` bibtex
-@inproceedings{yao2021wenet,
-  title={WeNet: Production oriented Streaming and Non-streaming End-to-End Speech Recognition Toolkit},
-  author={Yao, Zhuoyuan and Wu, Di and Wang, Xiong and Zhang, Binbin and Yu, Fan and Yang, Chao and Peng, Zhendong and Chen, Xiaoyu and Xie, Lei and Lei, Xin},
-  booktitle={Proc. Interspeech},
-  year={2021},
-  address={Brno, Czech Republic },
-  organization={IEEE}
+@article{DBLP:journals/corr/abs-2405-02132,
+  author       = {Xuelong Geng and
+                  Tianyi Xu and
+                  Kun Wei and
+                  Bingshen Mu and
+                  Hongfei Xue and
+                  He Wang and
+                  Yangze Li and
+                  Pengcheng Guo and
+                  Yuhang Dai and
+                  Longhao Li and
+                  Mingchen Shao and
+                  Lei Xie},
+  title        = {Unveiling the Potential of LLM-Based {ASR} on Chinese Open-Source
+                  Datasets},
+  journal      = {CoRR},
+  volume       = {abs/2405.02132},
+  year         = {2024},
+  url          = {https://doi.org/10.48550/arXiv.2405.02132},
+  doi          = {10.48550/ARXIV.2405.02132},
+  eprinttype    = {arXiv},
+  eprint       = {2405.02132},
 }
 
-@article{zhang2022wenet,
-  title={WeNet 2.0: More Productive End-to-End Speech Recognition Toolkit},
-  author={Zhang, Binbin and Wu, Di and Peng, Zhendong and Song, Xingchen and Yao, Zhuoyuan and Lv, Hang and Xie, Lei and Yang, Chao and Pan, Fuping and Niu, Jianwei},
-  journal={arXiv preprint arXiv:2203.15455},
-  year={2022}
-}
 ```
