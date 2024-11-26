@@ -249,6 +249,8 @@ class ASRLLM_Model(nn.Module):
                 )
             self.llama_model = get_peft_model(self.llama_model, self.peft_config)
 
+        self.embed_tokens = self.llama_model.model.model.embed_tokens if self.lora else self.llama_model.model.embed_tokens
+
         self.llama_tokenizer = AutoTokenizer.from_pretrained(
             llm_path, use_fast=False, trust_remote_code=True)
 
